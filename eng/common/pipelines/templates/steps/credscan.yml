@@ -9,7 +9,12 @@ steps:
     if ("$(Build.Reason)" -eq 'PullRequest') {
       $targetBranch = "origin/$(System.PullRequest.TargetBranch)" -replace "refs/heads/"
       $changedFiles = git diff $targetBranch HEAD --name-only --diff-filter=d
-      $changedFiles | ForEach-Object { Add-Content -Path "${{ parameters.SourceDirectory }}/credscan.tsv" -Value "${{ parameters.SourceDirectory }}/$_"}
+      foreach ($filePath in $changedFiles){
+        if ($filePath-match [System.IO.Path]::GetInvalidPathChars()) {
+          $filePath = Split-Path -Path $filePath
+        }
+        Add-Content -Path "${{ parameters.SourceDirectory }}/credscan.tsv" -Value "${{ parameters.SourceDirectory }}/$filePath"
+      }
     }
     else {
       $scanFolder = ""
