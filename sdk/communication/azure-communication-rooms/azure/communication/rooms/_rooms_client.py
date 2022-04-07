@@ -6,7 +6,7 @@
 from typing import TYPE_CHECKING
 from azure.core.tracing.decorator import distributed_trace
 from pyparsing import null_debug_action
-from azure.communication.rooms._models import CommunicationRoom, RoomParticipant
+from azure.communication.rooms._models import CommunicationRoom, RoomParticipant, RoomParticipantInternal
 
 from ._generated._azure_communication_rooms_service import AzureCommunicationRoomsService
 from ._generated.models import (
@@ -105,7 +105,7 @@ class RoomsClient(object):
         if participants is None:
             participantDict = {}
         else:
-           participantDict = {participant.identifier: participant for participant in participants}
+           participantDict = {participant.identifier: RoomParticipantInternal() for participant in participants}
         create_room_request = CreateRoomRequest(
             valid_from=valid_from,
             valid_until=valid_until,
@@ -201,7 +201,7 @@ class RoomsClient(object):
         :rtype: ~azure.communication.rooms.CommunicationRoom
         :raises: ~azure.core.exceptions.HttpResponseError, ValueError
         """
-        participantsDict = {participant.identifier: participant for participant in participants}
+        participantsDict = {participant.identifier: RoomParticipantInternal() for participant in participants}
         update_room_request = UpdateRoomRequest(
             participants=participantsDict
         )

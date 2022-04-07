@@ -138,7 +138,21 @@ class CommunicationRoom(msrest.serialization.Model):
         **kwargs
         )
 
-class RoomParticipant(msrest.serialization.Model):
+class RoomParticipantInternal(msrest.serialization.Model):
+    """The participant to a meeting
+
+    """
+
+    _attribute_map = {
+    }
+
+    def __init__(
+        self,
+        **kwargs
+    ):
+        super(RoomParticipantInternal, self).__init__(**kwargs)
+
+class RoomParticipant(object):
     """The participant to a meeting room.
 
     :ivar identifier: Participant MRI.

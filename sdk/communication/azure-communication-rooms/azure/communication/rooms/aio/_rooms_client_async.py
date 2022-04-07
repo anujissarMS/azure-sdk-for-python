@@ -6,7 +6,7 @@
 from typing import TYPE_CHECKING
 
 from azure.core.tracing.decorator_async import distributed_trace_async
-from azure.communication.rooms._models import CommunicationRoom
+from azure.communication.rooms._models import CommunicationRoom, RoomParticipantInternal, RoomParticipant
 from .._generated.aio._azure_communication_rooms_service import AzureCommunicationRoomsService
 from .._shared.utils import parse_connection_str, get_authentication_policy
 from .._version import SDK_MONIKER
@@ -104,7 +104,7 @@ class RoomsClient(object):
         if participants is None:
             participantDict = {}
         else:
-           participantDict = {participant.identifier: participant for participant in participants}
+           participantDict = {participant.identifier: RoomParticipantInternal() for participant in participants}
         create_room_request = CreateRoomRequest(
             valid_from=valid_from,
             valid_until=valid_until,
@@ -200,7 +200,7 @@ class RoomsClient(object):
         :rtype: ~azure.communication.rooms.CommunicationRoom
         :raises: ~azure.core.exceptions.HttpResponseError, ValueError
         """
-        participantsDict = {participant.identifier: participant for participant in participants}
+        participantsDict = {participant.identifier: RoomParticipantInternal() for participant in participants}
         update_room_request = UpdateRoomRequest(
             participants=participantsDict
         )
